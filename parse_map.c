@@ -6,25 +6,11 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/07 11:34:04 by atoulous          #+#    #+#             */
-/*   Updated: 2016/07/20 15:39:02 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/11 19:32:53 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	ft_refresh_image(t_var *var)
-{
-	int		x;
-	int		y;
-
-	x = -1;
-	while (++x < WIDTH_WIN)
-	{
-		y = -1;
-		while (++y < HEIGHT_WIN)
-			fill_image(var, x, y, 0x0);
-	}
-}
 
 int		get_xmax(char *line)
 {
@@ -47,13 +33,13 @@ int		get_xmax(char *line)
 	return (c);
 }
 
-void	parse_map(t_var *var, int fd)
+void	parse_map(t_var *var)
 {
 	char	*line;
 
 	YMAX = 0;
 	MAP = ft_strnew(BUFF_SIZE);
-	while (get_next_line(fd, &line))
+	while (get_next_line(FLD, &line))
 	{
 		!XMAX ? XMAX = get_xmax(line) : 0;
 		if (XMAX != get_xmax(line) || !XMAX)
@@ -64,7 +50,6 @@ void	parse_map(t_var *var, int fd)
 		YMAX++;
 	}
 	TAB = ft_strsplit(MAP, '\n');
-	free(MAP);
 }
 
 void	free_tab(t_var *var)
@@ -75,6 +60,7 @@ void	free_tab(t_var *var)
 	while (TAB[++i])
 		free(TAB[i]);
 	free(TAB);
+	free(MAP);
 	mlx_destroy_image(MLX, IMG);
 	MLX = NULL;
 	WIN = NULL;

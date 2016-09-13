@@ -6,25 +6,11 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/19 18:35:25 by atoulous          #+#    #+#             */
-/*   Updated: 2016/07/21 20:34:57 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/12 19:35:53 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	init_raycasting(t_var *var)
-{
-	POS_X = 2;
-	POS_Y = 2;
-	DIR_X = -1;
-	DIR_Y = 0;
-	PLANE_X = 0;
-	PLANE_Y = 0.66;
-	TIME = 0;
-	OLDTIME = 0;
-	HEIGHT_CAM = HEIGHT_WALL / 2;
-	HIT = 0;
-}
 
 void	calc_step(t_var *var)
 {
@@ -36,7 +22,7 @@ void	calc_step(t_var *var)
 	else
 	{
 		STEP_X = 1;
-		SIDEDIST_X = (RAYPOS_X + 1.0 - RAYPOS_X) * DELTADIST_X;
+		SIDEDIST_X = (MAP_X + 1.0 - RAYPOS_X) * DELTADIST_X;
 	}
 	if (RAYDIR_Y < 0)
 	{
@@ -52,6 +38,7 @@ void	calc_step(t_var *var)
 
 void	perform_dda(t_var *var)
 {
+	HIT = 0;
 	while (HIT == 0)
 	{
 		if (SIDEDIST_X < SIDEDIST_Y)
@@ -66,56 +53,116 @@ void	perform_dda(t_var *var)
 			MAP_Y += STEP_Y;
 			SIDE = 1;
 		}
-		if (TAB[MAP_X][MAP_Y] > 0)
+		if (TAB[MAP_X][MAP_Y] != '0')
 			HIT = 1;
 	}
 }
 
-void	wall_color(t_var *var)
+void	drawskybox(t_var *var, int x)
 {
-	if (TAB[MAP_X][MAP_Y])
-		COLOR = 0xFFFFFF;
-	if (SIDE == 1)
-		COLOR = 0xFF0000;
-	fill_image(var, DRAWSTART, DRAWEND, COLOR);
+	int		px;
+
+	Y1 = 0;
+	Y2 = HEIGHT_WIN;
+	while (Y1 < Y2)
+	{
+		px = Y1 * SKYSIZELINE + x * (BPP / 8);
+		if ((DIR_X > -1) && (DIR_Y < 0))
+			COLOR = SKYFRONTDATA[px] + SKYFRONTDATA[px + 1] * 256
+			+ SKYFRONTDATA[px + 2] * 65536;
+		if ((DIR_X >= 0) && (DIR_Y > 0))
+			COLOR = SKYBACKDATA[px] + SKYBACKDATA[px + 1] * 256
+			+ SKYBACKDATA[px + 2] * 65536;
+		if ((DIR_X < 0) && (DIR_Y >= 0))
+			COLOR = SKYLEFTDATA[px] + SKYLEFTDATA[px + 1] * 256
+			+ SKYLEFTDATA[px + 2] * 65536;
+		if ((DIR_X > 0) && (DIR_Y >= 0))
+			COLOR = SKYRIGHTDATA[px] + SKYRIGHTDATA[px + 1] * 256
+			+ SKYRIGHTDATA[px + 2] * 65536;
+		fill_image(var, x, Y1++, COLOR);
+	}
+}
+
+void	drawline(t_var *var, int x)
+{
+	int				pix;
+	int				textx;
+
+	Y1 = DRAWSTART;
+	Y2 = DRAWEND;
+	LINE = Y2 - Y1;
+	while (Y1 <= Y2)
+	{
+		if (SIDE == 0)
+			WALLX = RAYPOS_Y + PERPWALLDIST * RAYDIR_Y;
+		else
+			WALLX = RAYPOS_X + PERPWALLDIST * RAYDIR_X;
+		WALLX -= floor(WALLX);
+		textx = (int)(WALLX * (double)(TEXTX));
+		if ((SIDE == 0 && RAYDIR_X > 0) || (SIDE == 1 && RAYDIR_Y < 0))
+			textx = TEXTX - textx - 1;
+		pix = ((int)((I++ + (LINEHEIGHT - LINE) / 2) * TEXTX / LINEHEIGHT
+						* TEXTSIZELINE) + textx * (BPP / 8));
+		if (TAB[MAP_X][MAP_Y] == '1')
+			COLOR = WOODDATA[pix] + WOODDATA[pix + 1] * 256 + WOODDATA[pix + 2]
+				* 65536;
+		if (TAB[MAP_X][MAP_Y] == '9')
+			COLOR = OIMDATA[pix] + OIMDATA[pix + 1] * 256 + OIMDATA[pix + 2]
+				* 65536;
+		SIDE == 1 ? COLOR = (COLOR >> 1) & 8355711 : 0;
+		fill_image(var, x, Y1++, COLOR);
+	}
+}
+
+void	drawcursor(t_var *var)
+{
+	int		i;
+
+	i = WIDTH_WIN / 2 - 10;
+	while (++i < WIDTH_WIN / 2 + 10)
+		fill_image(var, i, HEIGHT_WIN / 2, 0xFF0000);
+	i = HEIGHT_WIN / 2 - 10;
+	while (++i < HEIGHT_WIN / 2 + 10)
+		fill_image(var, WIDTH_WIN / 2, i, 0xFF0000);
+}
+void	raycasting(t_var *var, int x)
+{
+	CAM_X = 2 * x / (double)WIDTH_WIN - 1;
+	RAYPOS_X = POS_X;
+	RAYPOS_Y = POS_Y;
+	RAYDIR_X = DIR_X + PLANE_X * CAM_X;
+	RAYDIR_Y = DIR_Y + PLANE_Y * CAM_X;
+	MAP_X = (int)RAYPOS_X;
+	MAP_Y = (int)RAYPOS_Y;
+	DELTADIST_X = sqrt(1 + (RAYDIR_Y * RAYDIR_Y) / (RAYDIR_X * RAYDIR_X));
+	DELTADIST_Y = sqrt(1 + (RAYDIR_X * RAYDIR_X) / (RAYDIR_Y * RAYDIR_Y));
+	calc_step(var);
+	perform_dda(var);
+	if (SIDE == 0)
+		PERPWALLDIST = (MAP_X - RAYPOS_X + (1 - STEP_X) / 2) / RAYDIR_X;
+	else
+		PERPWALLDIST = (MAP_Y - RAYPOS_Y + (1 - STEP_Y) / 2) / RAYDIR_Y;
+	LINEHEIGHT = HEIGHT_WIN / PERPWALLDIST;
+	DRAWSTART = HEIGHT_WIN / 2 - LINEHEIGHT / 2;
+	DRAWSTART < 0 ? DRAWSTART = 0 : 0;
+	DRAWEND = LINEHEIGHT / 2 + HEIGHT_WIN / 2;
+	DRAWEND >= HEIGHT_WIN ? DRAWEND = HEIGHT_WIN - 1 : 0;
 }
 
 int		launch_wolf3d(t_var *var)
 {
 	int		x;
-	double	w;
 
-	init_raycasting(var);
 	x = -1;
-	w = WIDTH_WIN;
-	while (++x < w)
+	while (++x <= WIDTH_WIN)
 	{
-		CAM_X = 2 * x / (w - 1);
-		RAYPOS_X = POS_X;
-		RAYPOS_Y = POS_Y;
-		RAYDIR_X = DIR_X + PLANE_X * CAM_X;
-		RAYDIR_Y = DIR_Y + PLANE_Y * CAM_X;
-		MAP_X = (int)RAYPOS_X;
-		MAP_Y = (int)RAYPOS_Y;
-		DELTADIST_X = sqrt(1 + (RAYDIR_Y *RAYDIR_Y) / (RAYDIR_X * RAYDIR_X));
-		DELTADIST_Y = sqrt(1 + (RAYDIR_X *RAYDIR_X) / (RAYDIR_Y * RAYDIR_Y));
-		calc_step(var);
-		perform_dda(var);
-		if (SIDE == 0)
-			PERPWALLDIST = (MAP_X - RAYPOS_X + (1 - STEP_X) / 2) / RAYPOS_X;
-		else
-			PERPWALLDIST = (MAP_Y - RAYPOS_Y + (1 - STEP_Y) / 2) / RAYDIR_Y;
-		LINEHEIGHT = (int)(H / PERPWALLDIST);
-		DRAWSTART = -LINEHEIGHT / 2 + H / 2;
-		if (DRAWSTART < 0)
-			DRAWSTART = 0;
-		DRAWEND = LINEHEIGHT / 2 + H / 2;
-		if (DRAWEND >= H)
-			DRAWEND = H - 1;
-		wall_color(var);
+		drawskybox(var, x);
+		raycasting(var, x);
+		I = 0;
+		drawline(var, x);
 	}
+	drawcursor(var);
 	OLDTIME = TIME;
 	mlx_put_image_to_window(MLX, WIN, IMG, 0, 0);
-	//mlx_destroy_image(MLX, IMG);
 	return (0);
 }

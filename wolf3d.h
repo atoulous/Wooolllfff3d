@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/07/21 20:14:19 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/12 19:25:50 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@
 # define HIT var->ray->hit
 # define SIDE var->ray->side
 # define LINEHEIGHT var->ray->lineheight
-# define H var->ray->h
 # define DRAWSTART var->ray->drawstart
 # define DRAWEND var->ray->drawend
 # define COLOR var->ray->color
+# define MOVESPEED var->ray->movespeed
+# define ROTSPEED var->ray->rotspeed
 # define POS_X var->ray->pos_x
 # define POS_Y var->ray->pos_y
 # define DIR_X var->ray->dir_x
@@ -49,10 +50,13 @@
 # define DELTADIST_X var->ray->deltadist_x
 # define DELTADIST_Y var->ray->deltadist_y
 # define PERPWALLDIST var->ray->perpwalldist
+# define WALLX var->ray->wallx
 
+# define KEYCODE var->keycode
 # define MLX var->mlx
 # define WIN var->win
 # define IMG var->img
+# define FLD var->fld
 # define DATA var->data
 # define MAP var->map
 # define TAB var->tab
@@ -67,6 +71,53 @@
 # define HEIGHT_WALL var->height_wall
 # define XMAX var->xmax
 # define YMAX var->ymax
+# define Y1 var->y1
+# define Y2 var->y2
+# define I var->i
+# define LINE var->line
+
+# define WOOD var->text->wood
+# define SKYFRONT var->text->skyfront
+# define SKYBACK var->text->skyback
+# define SKYLEFT var->text->skyleft
+# define SKYRIGHT var->text->skyright
+# define WOODDATA var->text->wooddata
+# define SKYFRONTDATA var->text->skyfrontdata
+# define SKYBACKDATA var->text->skybackdata
+# define SKYLEFTDATA var->text->skyleftdata
+# define SKYRIGHTDATA var->text->skyrightdata
+# define TEXTSIZELINE var->text->textsizeline
+# define TEXTX var->text->textx
+# define SKYX var->text->skyx
+# define SKYY var->text->skyy
+# define SKYSIZELINE var->text->skysizeline
+# define OIM var->text->oim
+# define OIMDATA var->text->oimdata
+# define OIMX var->text->oimx
+# define OIMSIZELINE var->text->oimsizeline
+
+typedef struct		s_text
+{
+	void			*wood;
+	void			*skyfront;
+	void			*skyback;
+	void			*skyright;
+	void			*skyleft;
+	void			*oim;
+	char			*wooddata;
+	char			*skyfrontdata;
+	char			*skybackdata;
+	char			*skyrightdata;
+	char			*skyleftdata;
+	char			*oimdata;
+	int				textsizeline;
+	int				textx;
+	int				skysizeline;
+	int				skyx;
+	int				skyy;
+	int				oimx;
+	int				oimsizeline;
+}					t_text;
 
 typedef struct		s_ray
 {
@@ -78,7 +129,6 @@ typedef struct		s_ray
 	int				hit;
 	int				side;
 	int				lineheight;
-	int				h;
 	int				drawstart;
 	int				drawend;
 	int				color;
@@ -100,6 +150,9 @@ typedef struct		s_ray
 	double			deltadist_x;
 	double			deltadist_y;
 	double			perpwalldist;
+	double			movespeed;
+	double			rotspeed;
+	double			wallx;
 }					t_ray;
 
 typedef struct		s_var
@@ -110,6 +163,7 @@ typedef struct		s_var
 	char			*data;
 	char			*map;
 	char			**tab;
+	int				fld;
 	int				bpp;
 	int				sizeline;
 	int				endian;
@@ -121,14 +175,23 @@ typedef struct		s_var
 	int				height_wall;
 	int				xmax;
 	int				ymax;
+	int				y1;
+	int				y2;
+	int				i;
+	int				line;
+	int				keycode;
 	t_ray			*ray;
+	t_text			*text;
 }					t_var;
 
-void				parse_map(t_var *var, int fd);
+void				parse_map(t_var *var);
 void				free_tab(t_var *var);
-void				ft_refresh_image(t_var *var);
+void				refresh_image(t_var *var);
 void				restart_wolf3d(t_var *var);
 void				fill_image(t_var *var, int x, int y, int color);
+void				raycasting(t_var *var, int x);
 int					launch_wolf3d(t_var *var);
+int					ft_key(int keycode, t_var *var);
+int					ft_crossquit(t_var *var);
 
 #endif
