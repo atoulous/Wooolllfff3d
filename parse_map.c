@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/06/07 11:34:04 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/11 19:32:53 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/13 18:04:42 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		get_xmax(char *line)
 {
 	int		i;
-	int		c;
+	/*int		c;
 
 	i = 0;
 	c = 0;
@@ -30,7 +30,11 @@ int		get_xmax(char *line)
 				i++;
 		}
 	}
-	return (c);
+	return (c);*/
+	i = 0;
+	while (*line++)
+		i++;
+	return (i);
 }
 
 void	parse_map(t_var *var)

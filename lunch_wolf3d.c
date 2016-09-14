@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/19 18:35:25 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/12 19:35:53 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/14 21:17:13 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,87 @@ void	drawskybox(t_var *var, int x)
 	}
 }
 
+void	color_textures(t_var *var, int px)
+{
+	if (TAB[MAP_X][MAP_Y] == '1')
+		COLOR = WALLDATA[px] + WALLDATA[px + 1] * 256 + WALLDATA[px + 2]
+			* 65536;
+	if (TAB[MAP_X][MAP_Y] == 'F')
+		COLOR = WINWALLDATA[px] + WINWALLDATA[px + 1] * 256 +
+			WINWALLDATA[px + 2] * 65536;
+	if (TAB[MAP_X][MAP_Y] == 'D' || TAB[MAP_X][MAP_Y] == 'd')
+		COLOR = DOORWALLDATA[px] + DOORWALLDATA[px + 1] * 256 +
+			DOORWALLDATA[px + 2] * 65536;
+	if (TAB[MAP_X][MAP_Y] == '3')
+		COLOR = GLASSDATA[px] + GLASSDATA[px + 1] * 256 +
+			GLASSDATA[px + 2] * 65536;
+	if (TAB[MAP_X][MAP_Y] == 'B')
+		COLOR = BOXDATA[px] + BOXDATA[px + 1] * 256 + BOXDATA[px + 2]
+			* 65536;
+	if (TAB[MAP_X][MAP_Y] == 'b')
+		COLOR = METALBOXDATA[px] + METALBOXDATA[px + 1] * 256 +
+			METALBOXDATA[px + 2] * 65536;
+	if (TAB[MAP_X][MAP_Y] == '5')
+		COLOR = AUTOMATDATA[px] + AUTOMATDATA[px + 1] * 256 + AUTOMATDATA[px + 2] * 65536;
+	//if (TAB[MAP_X][MAP_Y] == '9')
+	//	COLOR = OIMDATA[px] + OIMDATA[px + 1] * 256 + OIMDATA[px + 2]
+	//		* 65536;
+}
+
+void	drawfloor(t_var *var, int x)
+{
+	double	floorwallx;
+	double	floorwally;
+	double	distwall;
+	double	distplayer;
+	double	currentdist;
+	double	weight;
+	double	currentfloorx;
+	double	currentfloory;
+	int		floortexx;
+	int		floortexy;
+
+	if (SIDE == 0 && RAYDIR_X > 0)
+	{
+		floorwallx = MAP_X;
+		floorwally = MAP_Y + WALLX;
+	}
+	else if (SIDE == 0 && RAYDIR_X < 0)
+	{
+		floorwallx = MAP_X + 1.0;
+		floorwally = MAP_Y + WALLX;
+	}
+	else if (SIDE == 1 && RAYDIR_Y > 0)
+	{
+		floorwallx = MAP_X + WALLX;
+		floorwally = MAP_Y;
+	}
+	else
+	{
+		floorwallx = MAP_X + WALLX;
+		floorwally = MAP_Y + 1.0;
+	}
+	distwall = PERPWALLDIST;
+	distplayer = 0.0;
+	if (DRAWEND < 0)
+		DRAWEND = HEIGHT_WIN;
+	while (++DRAWEND < HEIGHT_WIN)
+	{
+		currentdist = HEIGHT_WIN / (2.0 * DRAWEND - HEIGHT_WIN);
+		weight = (currentdist - distplayer) / (distwall - distplayer);
+		currentfloorx = weight * floorwallx + (1.0 - weight) * POS_X;
+		currentfloory = weight * floorwally + (1.0 - weight) * POS_Y;
+		floortexx = (int)(currentfloorx * ROADX) % ROADX;
+		floortexy = (int)(currentfloory * ROADX) % ROADX;
+		PX = (ROADX * floortexy + floortexx);
+		COLOR = ROADDATA[PX] + ROADDATA[PX + 1] * 256 + ROADDATA[PX + 2] * 65536;
+		fill_image(var, x, DRAWEND, COLOR);
+	}
+}
+
 void	drawline(t_var *var, int x)
 {
-	int				pix;
+	int				px;
 	int				textx;
 
 	Y1 = DRAWSTART;
@@ -100,18 +178,21 @@ void	drawline(t_var *var, int x)
 		WALLX -= floor(WALLX);
 		textx = (int)(WALLX * (double)(TEXTX));
 		if ((SIDE == 0 && RAYDIR_X > 0) || (SIDE == 1 && RAYDIR_Y < 0))
-			textx = TEXTX - textx - 1;
-		pix = ((int)((I++ + (LINEHEIGHT - LINE) / 2) * TEXTX / LINEHEIGHT
+			textx = (TEXTX - textx - 1);
+		px = ((int)((I++ + (LINEHEIGHT - LINE) / 2) * TEXTX / LINEHEIGHT
 						* TEXTSIZELINE) + textx * (BPP / 8));
-		if (TAB[MAP_X][MAP_Y] == '1')
-			COLOR = WOODDATA[pix] + WOODDATA[pix + 1] * 256 + WOODDATA[pix + 2]
-				* 65536;
-		if (TAB[MAP_X][MAP_Y] == '9')
-			COLOR = OIMDATA[pix] + OIMDATA[pix + 1] * 256 + OIMDATA[pix + 2]
-				* 65536;
+		color_textures(var, px);
 		SIDE == 1 ? COLOR = (COLOR >> 1) & 8355711 : 0;
 		fill_image(var, x, Y1++, COLOR);
 	}
+	drawfloor(var, x);
+	/*while (++DRAWEND < HEIGHT_WIN)
+	{
+		px = DRAWEND * SKYSIZELINE + x * (BPP / 8);
+		COLOR = OIMDATA[px] + OIMDATA[px + 1] * 256
+			+ OIMDATA[px + 2] * 65536;
+		fill_image(var, x, DRAWEND, COLOR);
+	}*/
 }
 
 void	drawcursor(t_var *var)

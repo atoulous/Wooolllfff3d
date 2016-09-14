@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/06 19:26:28 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/12 19:27:37 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/14 19:03:19 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	restart_wolf3d(t_var *var)
 		free(TAB[i]);
 	free(TAB);
 	TAB = ft_strsplit(MAP, '\n');
-	POS_X = 8;
-	POS_Y = 8;
+	find_start(var);
 	DIR_X = -1;
 	DIR_Y = 0;
 	PLANE_X = 0;
@@ -93,10 +92,12 @@ void	ft_moves(int keycode, t_var *var)
 }
 int		minecraft(int keycode, t_var *var)
 {
-	if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] != '0')
+	if ((TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'D')
+	|| (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'B'))
 		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '0';
-	else
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '9';
+	else if ((TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == '0')
+		&& (((int)(POS_X + DIR_X) != POS_X) && (int)(POS_Y + DIR_Y) != POS_Y))
+		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'B';
 	return (0);
 }
 
@@ -110,7 +111,7 @@ int		ft_key(int keycode, t_var *var)
 		free_tab(var);
 		exit(EXIT_SUCCESS);
 	}
-	refresh_image(var);
+	//refresh_image(var);
 	ft_moves(keycode, var);
 	ft_rotates(keycode, var);
 	ft_putchar(TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y]);
@@ -129,6 +130,11 @@ int		ft_key(int keycode, t_var *var)
 	ft_putnbr(DIR_X);
 	ft_putstr("\nDIR_Y==");
 	ft_putnbr(DIR_Y);
+	ft_putstr("\n");
+	ft_putstr("XMAX YMAX");
+	ft_putnbr(XMAX);
+	ft_putstr("\n");
+	ft_putnbr(YMAX);
 	ft_putstr("\n");
 	while (TAB[++i])
 		ft_putendl(TAB[i]);

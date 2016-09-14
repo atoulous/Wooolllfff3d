@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/12 19:25:50 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/14 20:59:08 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 # define DELTADIST_Y var->ray->deltadist_y
 # define PERPWALLDIST var->ray->perpwalldist
 # define WALLX var->ray->wallx
+# define PX var->ray->px
 
 # define KEYCODE var->keycode
 # define MLX var->mlx
@@ -76,20 +77,40 @@
 # define I var->i
 # define LINE var->line
 
+# define WALL var->text->wall
+# define WINWALL var->text->winwall
+# define DOORWALL var->text->doorwall
 # define WOOD var->text->wood
+# define INDOOR var->text->indoor
 # define SKYFRONT var->text->skyfront
 # define SKYBACK var->text->skyback
 # define SKYLEFT var->text->skyleft
 # define SKYRIGHT var->text->skyright
+# define GLASS var->text->glass
+# define BOX var->text->box
+# define METALBOX var->text->metalbox
+# define AUTOMAT var->text->automat
+# define ROAD var->text->road
+# define WALLDATA var->text->walldata
+# define WINWALLDATA var->text->winwalldata
+# define DOORWALLDATA var->text->doorwalldata
 # define WOODDATA var->text->wooddata
+# define INDOORDATA var->text->indoordata
 # define SKYFRONTDATA var->text->skyfrontdata
 # define SKYBACKDATA var->text->skybackdata
 # define SKYLEFTDATA var->text->skyleftdata
 # define SKYRIGHTDATA var->text->skyrightdata
+# define GLASSDATA var->text->glassdata
+# define BOXDATA var->text->boxdata
+# define METALBOXDATA var->text->metalboxdata
+# define AUTOMATDATA var->text->automatdata
+# define ROADDATA var->text->roaddata
 # define TEXTSIZELINE var->text->textsizeline
 # define TEXTX var->text->textx
 # define SKYX var->text->skyx
 # define SKYY var->text->skyy
+# define ROADX var->text->roadx
+# define ROADSIZELINE var->text->roadsizeline
 # define SKYSIZELINE var->text->skysizeline
 # define OIM var->text->oim
 # define OIMDATA var->text->oimdata
@@ -98,25 +119,45 @@
 
 typedef struct		s_text
 {
+	void			*wall;
+	void			*winwall;
+	void			*doorwall;
 	void			*wood;
+	void			*indoor;
 	void			*skyfront;
 	void			*skyback;
 	void			*skyright;
 	void			*skyleft;
 	void			*oim;
+	void			*glass;
+	void			*box;
+	void			*metalbox;
+	void			*automat;
+	void			*road;
+	char			*walldata;
+	char			*winwalldata;
+	char			*doorwalldata;
 	char			*wooddata;
+	char			*indoordata;
 	char			*skyfrontdata;
 	char			*skybackdata;
 	char			*skyrightdata;
 	char			*skyleftdata;
 	char			*oimdata;
+	char			*glassdata;
+	char			*boxdata;
+	char			*metalboxdata;
+	char			*automatdata;
+	char			*roaddata;
 	int				textsizeline;
 	int				textx;
+	int				roadx;
 	int				skysizeline;
 	int				skyx;
 	int				skyy;
 	int				oimx;
 	int				oimsizeline;
+	int				roadsizeline;
 }					t_text;
 
 typedef struct		s_ray
@@ -132,6 +173,7 @@ typedef struct		s_ray
 	int				drawstart;
 	int				drawend;
 	int				color;
+	int				px;
 	double			pos_x;
 	double			pos_y;
 	double			dir_x;
@@ -178,6 +220,8 @@ typedef struct		s_var
 	int				y1;
 	int				y2;
 	int				i;
+	int				v;
+	int				h;
 	int				line;
 	int				keycode;
 	t_ray			*ray;
@@ -190,6 +234,7 @@ void				refresh_image(t_var *var);
 void				restart_wolf3d(t_var *var);
 void				fill_image(t_var *var, int x, int y, int color);
 void				raycasting(t_var *var, int x);
+void				find_start(t_var *var);
 int					launch_wolf3d(t_var *var);
 int					ft_key(int keycode, t_var *var);
 int					ft_crossquit(t_var *var);
