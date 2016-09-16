@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/19 18:35:25 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/14 21:17:13 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/16 17:02:25 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ void	perform_dda(t_var *var)
 			MAP_Y += STEP_Y;
 			SIDE = 1;
 		}
-		if (TAB[MAP_X][MAP_Y] != '0')
+		if (TAB[MAP_X][MAP_Y] != '0' && TAB[MAP_X][MAP_Y] != 'R'
+				&& TAB[MAP_X][MAP_Y] != 'r' && TAB[MAP_X][MAP_Y] != 'a'
+				&& TAB[MAP_X][MAP_Y] != 'q' && TAB[MAP_X][MAP_Y] != 'P'
+				&& TAB[MAP_X][MAP_Y] != 'p')
 			HIT = 1;
 	}
 }
@@ -105,9 +108,9 @@ void	color_textures(t_var *var, int px)
 			METALBOXDATA[px + 2] * 65536;
 	if (TAB[MAP_X][MAP_Y] == '5')
 		COLOR = AUTOMATDATA[px] + AUTOMATDATA[px + 1] * 256 + AUTOMATDATA[px + 2] * 65536;
-	//if (TAB[MAP_X][MAP_Y] == '9')
-	//	COLOR = OIMDATA[px] + OIMDATA[px + 1] * 256 + OIMDATA[px + 2]
-	//		* 65536;
+	if (TAB[MAP_X][MAP_Y] == '9')
+		COLOR = OIMDATA[px] + OIMDATA[px + 1] * 256 + OIMDATA[px + 2]
+			* 65536;
 }
 
 void	drawfloor(t_var *var, int x)
@@ -147,6 +150,7 @@ void	drawfloor(t_var *var, int x)
 	distplayer = 0.0;
 	if (DRAWEND < 0)
 		DRAWEND = HEIGHT_WIN;
+	I = 0;
 	while (++DRAWEND < HEIGHT_WIN)
 	{
 		currentdist = HEIGHT_WIN / (2.0 * DRAWEND - HEIGHT_WIN);
@@ -155,15 +159,33 @@ void	drawfloor(t_var *var, int x)
 		currentfloory = weight * floorwally + (1.0 - weight) * POS_Y;
 		floortexx = (int)(currentfloorx * ROADX) % ROADX;
 		floortexy = (int)(currentfloory * ROADX) % ROADX;
-		PX = (ROADX * floortexy + floortexx);
-		COLOR = ROADDATA[PX] + ROADDATA[PX + 1] * 256 + ROADDATA[PX + 2] * 65536;
+		PX = floortexy * ROADSIZELINE + floortexx * (BPP / 8);
+		if (TAB[(int)currentfloorx][(int)currentfloory] == 'R')
+			COLOR = ROADDATA[PX] + ROADDATA[PX + 1] * 256 + ROADDATA[PX + 2] * 65536;
+		if (TAB[(int)currentfloorx][(int)currentfloory] == 'r')
+			COLOR = ROADHDATA[PX] + ROADHDATA[PX + 1] * 256 + ROADHDATA[PX + 2] * 65536;
+		if (TAB[(int)currentfloorx][(int)currentfloory] == 'a')
+			COLOR = ROADADATA[PX] + ROADADATA[PX + 1] * 256 + ROADADATA[PX + 2] * 65536;
+		if (TAB[(int)currentfloorx][(int)currentfloory] == 'q')
+			COLOR = ROADBDATA[PX] + ROADBDATA[PX + 1] * 256 + ROADBDATA[PX + 2] * 65536;
+		if (TAB[(int)currentfloorx][(int)currentfloory] == '0')
+			COLOR = SANDDATA[PX] + SANDDATA[PX + 1] * 256 + SANDDATA[PX + 2] * 65536;
 		fill_image(var, x, DRAWEND, COLOR);
+		if (TAB[(int)currentfloorx][(int)currentfloory] == 'P'
+				|| TAB[(int)currentfloorx][(int)currentfloory] == 'p')
+		{
+			COLOR = ROADDATA[PX] + ROADDATA[PX + 1] * 256 + ROADDATA[PX + 2] * 65536;
+			COLOR = (COLOR >> 1) & 8355711;
+			fill_image(var, x, DRAWEND, COLOR);
+			COLOR = CEILDATA[PX] + CEILDATA[PX + 1] * 256 + CEILDATA[PX + 2] * 65536;
+			COLOR = (COLOR >> 1) & 8355711;
+			fill_image(var, x, HEIGHT_WIN - DRAWEND, COLOR);
+		}
 	}
 }
 
 void	drawline(t_var *var, int x)
 {
-	int				px;
 	int				textx;
 
 	Y1 = DRAWSTART;
@@ -179,20 +201,13 @@ void	drawline(t_var *var, int x)
 		textx = (int)(WALLX * (double)(TEXTX));
 		if ((SIDE == 0 && RAYDIR_X > 0) || (SIDE == 1 && RAYDIR_Y < 0))
 			textx = (TEXTX - textx - 1);
-		px = ((int)((I++ + (LINEHEIGHT - LINE) / 2) * TEXTX / LINEHEIGHT
+		PX = ((int)((I++ + (LINEHEIGHT - LINE) / 2) * TEXTX / LINEHEIGHT
 						* TEXTSIZELINE) + textx * (BPP / 8));
-		color_textures(var, px);
+		color_textures(var, PX);
 		SIDE == 1 ? COLOR = (COLOR >> 1) & 8355711 : 0;
 		fill_image(var, x, Y1++, COLOR);
 	}
 	drawfloor(var, x);
-	/*while (++DRAWEND < HEIGHT_WIN)
-	{
-		px = DRAWEND * SKYSIZELINE + x * (BPP / 8);
-		COLOR = OIMDATA[px] + OIMDATA[px + 1] * 256
-			+ OIMDATA[px + 2] * 65536;
-		fill_image(var, x, DRAWEND, COLOR);
-	}*/
 }
 
 void	drawcursor(t_var *var)
@@ -243,7 +258,10 @@ int		launch_wolf3d(t_var *var)
 		drawline(var, x);
 	}
 	drawcursor(var);
-	OLDTIME = TIME;
+	C & (1 << 0) ? moveback(var) : 0;
+	C & (1 << 1) ? movefront(var) : 0;
+	C & (1 << 2) ? moveleft(var) : 0;
+	C & (1 << 3) ? moveright(var) : 0;
 	mlx_put_image_to_window(MLX, WIN, IMG, 0, 0);
 	return (0);
 }

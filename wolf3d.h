@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/14 20:59:08 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/16 16:49:21 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@
 # define WALLX var->ray->wallx
 # define PX var->ray->px
 
-# define KEYCODE var->keycode
 # define MLX var->mlx
 # define WIN var->win
 # define IMG var->img
@@ -61,6 +60,7 @@
 # define DATA var->data
 # define MAP var->map
 # define TAB var->tab
+# define C var->c
 # define BPP var->bpp
 # define SIZELINE var->sizeline
 # define ENDIAN var->endian
@@ -76,6 +76,7 @@
 # define Y2 var->y2
 # define I var->i
 # define LINE var->line
+# define KEYCODE var->keycode
 
 # define WALL var->text->wall
 # define WINWALL var->text->winwall
@@ -91,6 +92,11 @@
 # define METALBOX var->text->metalbox
 # define AUTOMAT var->text->automat
 # define ROAD var->text->road
+# define ROADH var->text->roadh
+# define ROADA var->text->roada
+# define ROADB var->text->roadb
+# define SAND var->text->sand
+# define CEIL var->text->ceil
 # define WALLDATA var->text->walldata
 # define WINWALLDATA var->text->winwalldata
 # define DOORWALLDATA var->text->doorwalldata
@@ -105,6 +111,11 @@
 # define METALBOXDATA var->text->metalboxdata
 # define AUTOMATDATA var->text->automatdata
 # define ROADDATA var->text->roaddata
+# define ROADHDATA var->text->roadhdata
+# define ROADADATA var->text->roadadata
+# define ROADBDATA var->text->roadbdata
+# define SANDDATA var->text->sanddata
+# define CEILDATA var->text->ceildata
 # define TEXTSIZELINE var->text->textsizeline
 # define TEXTX var->text->textx
 # define SKYX var->text->skyx
@@ -134,6 +145,11 @@ typedef struct		s_text
 	void			*metalbox;
 	void			*automat;
 	void			*road;
+	void			*roadh;
+	void			*roada;
+	void			*roadb;
+	void			*sand;
+	void			*ceil;
 	char			*walldata;
 	char			*winwalldata;
 	char			*doorwalldata;
@@ -149,6 +165,11 @@ typedef struct		s_text
 	char			*metalboxdata;
 	char			*automatdata;
 	char			*roaddata;
+	char			*roadhdata;
+	char			*roadadata;
+	char			*roadbdata;
+	char			*sanddata;
+	char			*ceildata;
 	int				textsizeline;
 	int				textx;
 	int				roadx;
@@ -205,6 +226,7 @@ typedef struct		s_var
 	char			*data;
 	char			*map;
 	char			**tab;
+	char			c;
 	int				fld;
 	int				bpp;
 	int				sizeline;
@@ -237,6 +259,11 @@ void				raycasting(t_var *var, int x);
 void				find_start(t_var *var);
 int					launch_wolf3d(t_var *var);
 int					ft_key(int keycode, t_var *var);
+int					ft_release(int keycode, t_var *var);
 int					ft_crossquit(t_var *var);
+int					moveback(t_var *var);
+int					movefront(t_var *var);
+int					moveleft(t_var *var);
+int					moveright(t_var *var);
 
 #endif

@@ -6,41 +6,11 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 19:38:50 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/14 21:00:19 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/16 17:03:33 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-void	refresh_image(t_var *var)
-{
-	/*int		x;
-	int		y;
-
-	x = -1;
-	while (++x < WIDTH_WIN)
-	{
-		y = -1;
-		while (++y < HEIGHT_WIN)
-			fill_image(var, x, y, 0x0);
-	}
-	int		pix;
-	int		x;
-
-	x = WIDTH_WIN;
-	Y1 = 0;
-	Y2 = HEIGHT_WIN;
-	while (x < WIDTH_WIN)
-	{
-		while (Y1 < Y2)
-		{
-			pix = Y1 * SKYSIZELINE + x * (BPP / 8);
-			COLOR = SKYFRONTDATA[pix] + SKYFRONTDATA[pix + 1] * 256 + SKYFRONTDATA[pix + 2] * 65536;
-			fill_image(var, x, Y1++, COLOR);
-		}
-		x++;
-	}*/
-}
 
 void	fill_image(t_var *var, int x, int y, int color)
 {
@@ -56,7 +26,7 @@ void	fill_image(t_var *var, int x, int y, int color)
 		DATA[y * SIZELINE + x * (BPP / 8)] = r;
 		DATA[y * SIZELINE + x * (BPP / 8) + 1] = g;
 		DATA[y * SIZELINE + x * (BPP / 8) + 2] = b;
-		//DATA[y * SIZELINE + x * (BPP / 8) + 3] = 1 / 2;
+		//DATA[y * SIZELINE + x * (BPP / 8) + 3] = 200;
 	}
 }
 
@@ -95,44 +65,65 @@ void	init_raycasting(t_var *var)
 	ROTSPEED = 0.1;
 }
 
-void	init_texture(t_var *var)
+void	sky_text(t_var *var)
 {
-	if (!(var->text = (t_text*)ft_memalloc(sizeof(t_text))))
-		return (exit(EXIT_FAILURE));
-	WALL = mlx_xpm_file_to_image(MLX, "Text/wall.xpm", &TEXTX, &TEXTX);
-	WINWALL = mlx_xpm_file_to_image(MLX, "Text/winwall.xpm", &TEXTX, &TEXTX);
-	DOORWALL = mlx_xpm_file_to_image(MLX, "Text/doorwall.xpm", &TEXTX, &TEXTX);
-	ROAD = mlx_xpm_file_to_image(MLX, "Text/sandfloor.xpm", &ROADX, &ROADX);
-	WOOD = mlx_xpm_file_to_image(MLX, "Text/wood.xpm", &TEXTX, &TEXTX);
-	//OIM = mlx_xpm_file_to_image(MLX, "../Downloads/sandfloor.xpm", &OIMX, &OIMX);
-	GLASS = mlx_xpm_file_to_image(MLX, "Text/glass.xpm", &TEXTX, &TEXTX);
-	BOX = mlx_xpm_file_to_image(MLX, "Text/box.xpm", &TEXTX, &TEXTX);
-	METALBOX = mlx_xpm_file_to_image(MLX, "Text/metalbox.xpm", &TEXTX, &TEXTX);
-	AUTOMAT = mlx_xpm_file_to_image(MLX, "Text/automat.xpm", &TEXTX, &TEXTX);
-	SKYFRONT = mlx_xpm_file_to_image(MLX, "../Downloads/ib6uj-9os0z.xpm", &SKYY, &SKYX);
+	SKYFRONT = mlx_xpm_file_to_image(MLX, "Text/Dayboxfront.xpm", &SKYY, &SKYX);
 	SKYBACK = mlx_xpm_file_to_image(MLX, "Text/Dayboxback.xpm", &SKYY, &SKYX);
 	SKYLEFT = mlx_xpm_file_to_image(MLX, "Text/Dayboxleft.xpm", &SKYY, &SKYX);
 	SKYRIGHT = mlx_xpm_file_to_image(MLX, "Text/Dayboxright.xpm", &SKYY, &SKYX);
-	WALLDATA = mlx_get_data_addr(WALL, &BPP, &TEXTSIZELINE, &ENDIAN);
-	WINWALLDATA = mlx_get_data_addr(WINWALL, &BPP, &TEXTSIZELINE, &ENDIAN);
-	DOORWALLDATA = mlx_get_data_addr(DOORWALL, &BPP, &TEXTSIZELINE, &ENDIAN);
-	ROADDATA = mlx_get_data_addr(ROAD, &BPP, &ROADSIZELINE, &ENDIAN);
-	WOODDATA = mlx_get_data_addr(WOOD, &BPP, &TEXTSIZELINE, &ENDIAN);
-	//OIMDATA = mlx_get_data_addr(OIM, &BPP, &OIMSIZELINE, &ENDIAN);
-	GLASSDATA = mlx_get_data_addr(GLASS, &BPP, &TEXTSIZELINE, &ENDIAN);
-	BOXDATA = mlx_get_data_addr(BOX, &BPP, &TEXTSIZELINE, &ENDIAN);
-	METALBOXDATA = mlx_get_data_addr(METALBOX, &BPP, &TEXTSIZELINE, &ENDIAN);
-	AUTOMATDATA = mlx_get_data_addr(AUTOMAT, &BPP, &TEXTSIZELINE, &ENDIAN);
 	SKYFRONTDATA = mlx_get_data_addr(SKYFRONT, &BPP, &SKYSIZELINE, &ENDIAN);
 	SKYBACKDATA = mlx_get_data_addr(SKYBACK, &BPP, &SKYSIZELINE, &ENDIAN);
 	SKYLEFTDATA = mlx_get_data_addr(SKYLEFT, &BPP, &SKYSIZELINE, &ENDIAN);
 	SKYRIGHTDATA = mlx_get_data_addr(SKYRIGHT, &BPP, &SKYSIZELINE, &ENDIAN);
 }
 
+void	floor_text(t_var *var)
+{
+	ROAD = mlx_xpm_file_to_image(MLX, "Text/sandfloor.xpm", &ROADX, &ROADX);
+	ROADH = mlx_xpm_file_to_image(MLX, "Text/roadh.xpm", &ROADX, &ROADX);
+	ROADA = mlx_xpm_file_to_image(MLX, "Text/roada.xpm", &ROADX, &ROADX);
+	ROADB = mlx_xpm_file_to_image(MLX, "Text/roadb.xpm", &ROADX, &ROADX);
+	SAND = mlx_xpm_file_to_image(MLX, "Text/sandl.xpm", &ROADX, &ROADX);
+	CEIL = mlx_xpm_file_to_image(MLX, "Text/ceil.xpm", &ROADX, &ROADX);
+	ROADDATA = mlx_get_data_addr(ROAD, &BPP, &ROADSIZELINE, &ENDIAN);
+	ROADHDATA = mlx_get_data_addr(ROADH, &BPP, &ROADSIZELINE, &ENDIAN);
+	ROADADATA = mlx_get_data_addr(ROADA, &BPP, &ROADSIZELINE, &ENDIAN);
+	ROADBDATA = mlx_get_data_addr(ROADB, &BPP, &ROADSIZELINE, &ENDIAN);
+	SANDDATA = mlx_get_data_addr(SAND, &BPP, &ROADSIZELINE, &ENDIAN);
+	CEILDATA = mlx_get_data_addr(CEIL, &BPP, &ROADSIZELINE, &ENDIAN);
+}
+
+void	init_texture(t_var *var)
+{
+	if (!(var->text = (t_text*)ft_memalloc(sizeof(t_text))))
+		return (exit(EXIT_FAILURE));
+	sky_text(var);
+	floor_text(var);
+	WALL = mlx_xpm_file_to_image(MLX, "Text/wall.xpm", &TEXTX, &TEXTX);
+	WINWALL = mlx_xpm_file_to_image(MLX, "Text/winwall.xpm", &TEXTX, &TEXTX);
+	DOORWALL = mlx_xpm_file_to_image(MLX, "Text/doorwall.xpm", &TEXTX, &TEXTX);
+	WOOD = mlx_xpm_file_to_image(MLX, "Text/wood.xpm", &TEXTX, &TEXTX);
+	OIM = mlx_xpm_file_to_image(MLX, "Text/oim64.xpm", &OIMX, &OIMX);
+	GLASS = mlx_xpm_file_to_image(MLX, "Text/glass.xpm", &TEXTX, &TEXTX);
+	BOX = mlx_xpm_file_to_image(MLX, "Text/box.xpm", &TEXTX, &TEXTX);
+	METALBOX = mlx_xpm_file_to_image(MLX, "Text/metalbox.xpm", &TEXTX, &TEXTX);
+	AUTOMAT = mlx_xpm_file_to_image(MLX, "Text/automat.xpm", &TEXTX, &TEXTX);
+	WALLDATA = mlx_get_data_addr(WALL, &BPP, &TEXTSIZELINE, &ENDIAN);
+	WINWALLDATA = mlx_get_data_addr(WINWALL, &BPP, &TEXTSIZELINE, &ENDIAN);
+	DOORWALLDATA = mlx_get_data_addr(DOORWALL, &BPP, &TEXTSIZELINE, &ENDIAN);
+	WOODDATA = mlx_get_data_addr(WOOD, &BPP, &TEXTSIZELINE, &ENDIAN);
+	OIMDATA = mlx_get_data_addr(OIM, &BPP, &OIMSIZELINE, &ENDIAN);
+	GLASSDATA = mlx_get_data_addr(GLASS, &BPP, &TEXTSIZELINE, &ENDIAN);
+	BOXDATA = mlx_get_data_addr(BOX, &BPP, &TEXTSIZELINE, &ENDIAN);
+	METALBOXDATA = mlx_get_data_addr(METALBOX, &BPP, &TEXTSIZELINE, &ENDIAN);
+	AUTOMATDATA = mlx_get_data_addr(AUTOMAT, &BPP, &TEXTSIZELINE, &ENDIAN);
+}
+
 void	init_wolf3d(t_var *var, char *map)
 {
 	WIDTH_WIN = 1024;
 	HEIGHT_WIN = 768;
+	C = 0;
 	init_raycasting(var);
 	MLX = mlx_init();
 	WIN = mlx_new_window(MLX, WIDTH_WIN, HEIGHT_WIN, map);
@@ -158,6 +149,7 @@ void	ft_wolf3d(int fd, char *map)
 	init_wolf3d(var, map);
 	mlx_loop_hook(MLX, launch_wolf3d, var);
 	mlx_hook(WIN, KeyPress, KeyPressMask, ft_key, var);
+	mlx_hook(WIN, KeyRelease, KeyReleaseMask, ft_release, var);
 	mlx_hook(WIN, 17, Button1MotionMask, ft_crossquit, var);
 	//mlx_hook(WIN, ButtonPress, ButtonPressMask, ft_mouse, var);
 	//mlx_hook(WIN, MotionNotify, ButtonMotionMask, ft_motion_mouse, var);

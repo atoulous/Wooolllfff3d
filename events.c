@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/06 19:26:28 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/14 19:03:19 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/16 17:03:20 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,20 @@ int		ft_crossquit(t_var *var)
 	exit(EXIT_SUCCESS);
 }
 
+int		minecraft(int keycode, t_var *var)
+{
+	if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'D')
+		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'p';
+	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'B')
+		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '0';
+	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'p')
+		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'D';
+	else if ((TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == '0')
+		&& (((int)(POS_X + DIR_X) != POS_X) && (int)(POS_Y + DIR_Y) != POS_Y))
+		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'B';
+	return (0);
+}
+
 void	ft_rotates(int keycode, t_var *var)
 {
 	double	oldDirX;
@@ -59,51 +73,111 @@ void	ft_rotates(int keycode, t_var *var)
 	}
 }
 
-void	ft_moves(int keycode, t_var *var)
+int		moveback(t_var *var)
 {
-	if (keycode == 126 || keycode == 17)
-	{
-		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == '0' ?
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == '0' ||
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == 'R' ||
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == 'r' ||
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == 'a' ||
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == 'P' ||
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == 'p' ||
+		TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y] == 'q' ?
 			POS_X += DIR_X * MOVESPEED : 0;
-		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == '0' ?
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == '0' ||
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == 'R' ||
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == 'r' ||
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == 'a' ||
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == 'P' ||
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == 'p' ||
+		TAB[(int)POS_X][(int)(POS_Y + DIR_Y * MOVESPEED)] == 'q' ?
 			POS_Y += DIR_Y * MOVESPEED : 0;
-	}
-	if (keycode == 125 || keycode == 5)
-	{
-		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == '0' ?
-			POS_X -= DIR_X * MOVESPEED : 0;
-		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == '0' ?
-			POS_Y -= DIR_Y * MOVESPEED : 0;
-	}
-	if (keycode == 3)
-	{
-		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == '0' ?
-			POS_X -= PLANE_X * MOVESPEED : 0;
-		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == '0' ?
-			POS_Y -= PLANE_Y * MOVESPEED : 0;
-	}
-	if (keycode == 4)
-	{
-		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == '0' ?
-			POS_X += PLANE_X * MOVESPEED : 0;
-		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == '0' ?
-			POS_Y += PLANE_Y * MOVESPEED : 0;
-	}
-}
-int		minecraft(int keycode, t_var *var)
-{
-	if ((TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'D')
-	|| (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'B'))
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '0';
-	else if ((TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == '0')
-		&& (((int)(POS_X + DIR_X) != POS_X) && (int)(POS_Y + DIR_Y) != POS_Y))
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'B';
 	return (0);
+}
+
+int		movefront(t_var *var)
+{
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == '0' ||
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == 'R' ||
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == 'r' ||
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == 'a' ||
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == 'P' ||
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == 'p' ||
+		TAB[(int)(POS_X - DIR_X * MOVESPEED)][(int)POS_Y] == 'q' ?
+			POS_X -= DIR_X * MOVESPEED : 0;
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == '0' ||
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == 'R' ||
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == 'r' ||
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == 'a' ||
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == 'P' ||
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == 'p' ||
+		TAB[(int)POS_X][(int)(POS_Y - DIR_Y * MOVESPEED)] == 'q' ?
+			POS_Y -= DIR_Y * MOVESPEED : 0;
+	return (0);
+}
+
+int		moveleft(t_var *var)
+{
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == '0' ||
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == 'R' ||
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == 'r' ||
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == 'a' ||
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == 'P' ||
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == 'p' ||
+		TAB[(int)(POS_X - PLANE_X * MOVESPEED)][(int)POS_Y] == 'q' ?
+			POS_X -= PLANE_X * MOVESPEED : 0;
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == '0' ||
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == 'R' ||
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == 'r' ||
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == 'a' ||
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == 'P' ||
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == 'p' ||
+		TAB[(int)POS_X][(int)(POS_Y - PLANE_Y * MOVESPEED)] == 'q' ?
+			POS_Y -= PLANE_Y * MOVESPEED : 0;
+	return (0);
+}
+
+int		moveright(t_var *var)
+{
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == '0' ||
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == 'R' ||
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == 'r' ||
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == 'a' ||
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == 'P' ||
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == 'p' ||
+		TAB[(int)(POS_X + PLANE_X * MOVESPEED)][(int)POS_Y] == 'q' ?
+			POS_X += PLANE_X * MOVESPEED : 0;
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == '0' ||
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == 'R' ||
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == 'r' ||
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == 'a' ||
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == 'P' ||
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == 'p' ||
+		TAB[(int)POS_X][(int)(POS_Y + PLANE_Y * MOVESPEED)] == 'q' ?
+			POS_Y += PLANE_Y * MOVESPEED : 0;
+	return (0);
+}
+
+int		ft_release(int keycode, t_var *var)
+{
+	KEYCODE == 17 || KEYCODE == 126 ? C ^= (1 << 0) : 0;
+	KEYCODE == 5 || KEYCODE == 125 ? C ^= (1 << 1) : 0;
+	KEYCODE == 4 ? C ^= (1 << 2) : 0;
+	KEYCODE == 3 ? C ^= (1 << 3) : 0;
+	return (0);
+}
+
+void	ft_press(int keyCode, t_var *var)
+{
+	KEYCODE == 17 || KEYCODE == 126 ? C |= (1 << 0) : 0;
+	KEYCODE == 5 || KEYCODE == 125 ? C |= (1 << 1) : 0;
+	KEYCODE == 4 ? C |= (1 << 2) : 0;
+	KEYCODE == 3 ? C |= (1 << 3) : 0;
 }
 
 int		ft_key(int keycode, t_var *var)
 {
 	int		i;
+
 	i = -1;
 	KEYCODE = keycode;
 	if (keycode == 53)
@@ -111,8 +185,7 @@ int		ft_key(int keycode, t_var *var)
 		free_tab(var);
 		exit(EXIT_SUCCESS);
 	}
-	//refresh_image(var);
-	ft_moves(keycode, var);
+	ft_press(keycode, var);
 	ft_rotates(keycode, var);
 	ft_putchar(TAB[(int)(POS_X + DIR_X * MOVESPEED)][(int)POS_Y]);
 	keycode == 49 ? minecraft(keycode, var) : 0;
