@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/06 19:26:28 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/16 17:03:20 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/16 17:08:34 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,19 +159,19 @@ int		moveright(t_var *var)
 
 int		ft_release(int keycode, t_var *var)
 {
-	KEYCODE == 17 || KEYCODE == 126 ? C ^= (1 << 0) : 0;
-	KEYCODE == 5 || KEYCODE == 125 ? C ^= (1 << 1) : 0;
-	KEYCODE == 4 ? C ^= (1 << 2) : 0;
-	KEYCODE == 3 ? C ^= (1 << 3) : 0;
+	keycode == 17 || keycode == 126 ? C ^= (1 << 0) : 0;
+	keycode == 5 || keycode == 125 ? C ^= (1 << 1) : 0;
+	keycode == 3 ? C ^= (1 << 2) : 0;
+	keycode == 4 ? C ^= (1 << 3) : 0;
 	return (0);
 }
 
-void	ft_press(int keyCode, t_var *var)
+void	ft_press(int keycode, t_var *var)
 {
-	KEYCODE == 17 || KEYCODE == 126 ? C |= (1 << 0) : 0;
-	KEYCODE == 5 || KEYCODE == 125 ? C |= (1 << 1) : 0;
-	KEYCODE == 4 ? C |= (1 << 2) : 0;
-	KEYCODE == 3 ? C |= (1 << 3) : 0;
+	keycode == 17 || keycode == 126 ? C |= (1 << 0) : 0;
+	keycode == 5 || keycode == 125 ? C |= (1 << 1) : 0;
+	keycode == 3 ? C |= (1 << 2) : 0;
+	keycode == 4 ? C |= (1 << 3) : 0;
 }
 
 int		ft_key(int keycode, t_var *var)
@@ -179,7 +179,6 @@ int		ft_key(int keycode, t_var *var)
 	int		i;
 
 	i = -1;
-	KEYCODE = keycode;
 	if (keycode == 53)
 	{
 		free_tab(var);
