@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/16 16:49:21 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/17 17:45:32 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <math.h>
 # include <OpenCL/opencl.h>
 # include </System/Library/Frameworks/Tk.framework/Versions/8.5/Headers/X11/X.h>
+
+# define flo var->floor
 
 # define HEIGHT_CAM var->ray->height_cam
 # define MAP_X var->ray->map_x
@@ -181,6 +183,20 @@ typedef struct		s_text
 	int				roadsizeline;
 }					t_text;
 
+typedef struct		s_floor
+{
+	double			floorwallx;
+	double			floorwally;
+	double			distwall;
+	double			distplayer;
+	double			currentdist;
+	double			weight;
+	double			currentfloorx;
+	double			currentfloory;
+	int				floortexx;
+	int				floortexy;
+}					t_floor;
+
 typedef struct		s_ray
 {
 	int				height_cam;
@@ -240,30 +256,30 @@ typedef struct		s_var
 	int				xmax;
 	int				ymax;
 	int				y1;
-	int				y2;
-	int				i;
-	int				v;
-	int				h;
-	int				line;
-	int				keycode;
+	t_floor			*floor;
 	t_ray			*ray;
 	t_text			*text;
 }					t_var;
 
-void				parse_map(t_var *var);
+void				parse_map(t_var *var, int fd);
 void				free_tab(t_var *var);
-void				refresh_image(t_var *var);
 void				restart_wolf3d(t_var *var);
 void				fill_image(t_var *var, int x, int y, int color);
-void				raycasting(t_var *var, int x);
+void				wall_raycasting(t_var *var, int x);
+void				draw_wall(t_var *var, int x);
 void				find_start(t_var *var);
-int					launch_wolf3d(t_var *var);
+void				floor_raycasting(t_var *var, int x);
+void				draw_floor(t_var *var, int x);
+void				init_textures(t_var *var);
+void				init_raycasting(t_var *var);
+void				ft_moves(t_var *var);
+int					rotateright(t_var *var);
+int					rotateleft(t_var *var);
 int					ft_key(int keycode, t_var *var);
 int					ft_release(int keycode, t_var *var);
 int					ft_crossquit(t_var *var);
-int					moveback(t_var *var);
-int					movefront(t_var *var);
-int					moveleft(t_var *var);
-int					moveright(t_var *var);
+int					launch_wolf3d(t_var *var);
+int					ft_mouse(int button, int x, int y, t_var *var);
+int					ft_motion_mouse(int x, int y, t_var *var);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/15 18:15:54 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/15 18:15:56 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/17 17:41:17 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,41 @@
 int		get_xmax(char *line)
 {
 	int		i;
-	/*int		c;
 
-	i = 0;
-	c = 0;
-	while (line[i])
-	{
-		while (line[i] == ' ')
-			i++;
-		if (line[i] != ' ' && line[i])
-		{
-			c++;
-			while (line[i] != ' ' && line[i])
-				i++;
-		}
-	}
-	return (c);*/
 	i = 0;
 	while (*line++)
 		i++;
 	return (i);
 }
 
-void	parse_map(t_var *var)
+void	find_start(t_var *var)
+{
+	int		i;
+	int		j;
+
+	POS_X = 0;
+	POS_Y = 0;
+	j = -1;
+	while (++j < YMAX)
+	{
+		i = -1;
+		while (++i < XMAX)
+			if (TAB[j][i] == 'S')
+			{
+				!POS_X ? POS_X = j : 0;
+				!POS_Y ? POS_Y = i : 0;
+				TAB[j][i] = 'P';
+			}
+	}
+}
+
+void	parse_map(t_var *var, int fd)
 {
 	char	*line;
 
 	YMAX = 0;
 	MAP = ft_strnew(BUFF_SIZE);
-	while (get_next_line(FLD, &line))
+	while (get_next_line(fd, &line))
 	{
 		!XMAX ? XMAX = get_xmax(line) : 0;
 		if (XMAX != get_xmax(line) || !XMAX)
