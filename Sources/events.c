@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/06 19:26:28 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/21 17:36:52 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/22 19:20:49 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ int		ft_key(int keycode, t_var *var)
 		M = 1;
 	keycode == 49 ? minecraft(var) : 0;
 	keycode == 51 ? restart_wolf3d(var) : 0;
+	keycode == 18 ? WEAPON = 1 : 0;
+	keycode == 19 ? WEAPON = 2 : 0;
+	keycode == 20 ? WEAPON = 3 : 0;
+	keycode == 21 ? WEAPON = 4 : 0;
+	keycode == 23 ? WEAPON = 5 : 0;
 	i = -1;
 	//while (TAB[++i])
 	//	ft_putendl(TAB[i]);

@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/17 12:22:00 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/21 19:05:20 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/22 19:20:30 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,19 @@ void	sky_textures(t_var *var)
 	MENU = mlx_xpm_file_to_image(MLX, "Text/csmenu.xpm", &SKYY, &SKYX);
 	MENUDATA = mlx_get_data_addr(MENU, &BPP, &SKYSIZELINE, &ENDIAN);
 	AK = mlx_xpm_file_to_image(MLX, "Text/ak47.xpm", &WEAPONY, &WEAPONX);
+	AKF = mlx_xpm_file_to_image(MLX, "Text/akfire.xpm", &WEAPONY, &WEAPONX);
+	USP = mlx_xpm_file_to_image(MLX, "Text/usp256x256.xpm", &GUNY, &GUNX);
+	KNIFE = mlx_xpm_file_to_image(MLX, "Text/knife512.xpm", &KNIFEY, &KNIFEX);
+	HE = mlx_xpm_file_to_image(MLX, "Text/he512x256.xpm", &KNIFEY, &KNIFEX);
+	C4 = mlx_xpm_file_to_image(MLX, "Text/c4512x256.xpm", &KNIFEY, &KNIFEX);
 	AKDATA = mlx_get_data_addr(AK, &BPP, &WEAPONSIZELINE, &ENDIAN);
+	AKFDATA = mlx_get_data_addr(AKF, &BPP, &WEAPONSIZELINE, &ENDIAN);
+	USPDATA = mlx_get_data_addr(USP, &BPP, &GUNSIZELINE, &ENDIAN);
+	KNIFEDATA = mlx_get_data_addr(KNIFE, &BPP, &KNIFESIZELINE, &ENDIAN);
+	HEDATA = mlx_get_data_addr(HE, &BPP, &KNIFESIZELINE, &ENDIAN);
+	C4DATA = mlx_get_data_addr(C4, &BPP, &KNIFESIZELINE, &ENDIAN);
+	RADAR = mlx_xpm_file_to_image(MLX, "Text/radar.xpm", &TEXTX, &TEXTX);
+	RADARDATA = mlx_get_data_addr(RADAR, &BPP, &TEXTSIZELINE, &ENDIAN);
 }
 
 void	floor_textures(t_var *var)

@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/21 18:39:50 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/22 19:21:43 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@
 # define Y1 var->y1
 # define Y2 var->y2
 # define I var->i
+# define WEAPON var->weapon
+# define FIRE var->fire
 # define LINE var->line
 # define KEYCODE var->keycode
 
@@ -118,7 +120,7 @@
 # define ROADB var->text->roadb
 # define SAND var->text->sand
 # define CEIL var->text->ceil
-# define AK var->text->ak
+# define RADAR var->text->radar
 # define WALLDATA var->text->walldata
 # define WALLTAGDATA var->text->walltagdata
 # define WINWALLDATA var->text->winwalldata
@@ -140,7 +142,7 @@
 # define ROADBDATA var->text->roadbdata
 # define SANDDATA var->text->sanddata
 # define CEILDATA var->text->ceildata
-# define AKDATA var->text->akdata
+# define RADARDATA var->text->radardata
 # define TEXTSIZELINE var->text->textsizeline
 # define TEXTX var->text->textx
 # define SKYX var->text->skyx
@@ -152,9 +154,34 @@
 # define OIMDATA var->text->oimdata
 # define OIMX var->text->oimx
 # define OIMSIZELINE var->text->oimsizeline
+
+/*
+** weapons defines
+*/
+
+# define AK var->text->ak
+# define AKF var->text->akf
+# define USP var->text->usp
+# define KNIFE var->text->knife
+# define HE var->text->he
+# define C4 var->text->c4
+# define AKDATA var->text->akdata
+# define AKFDATA var->text->akfdata
+# define USPDATA var->text->uspdata
+# define KNIFEDATA var->text->knifedata
+# define HEDATA var->text->hedata
+# define C4DATA var->text->c4data
+# define GUNDATA var->text->gundata
 # define WEAPONX var->text->weaponx
 # define WEAPONY var->text->weapony
+# define GUNX var->text->gunx
+# define GUNY var->text->guny
+# define KNIFEX var->text->knifex
+# define KNIFEY var->text->knifey
 # define WEAPONSIZELINE var->text->weaponsizeline
+# define KNIFESIZELINE var->text->knifesizeline
+# define GUNSIZELINE var->text->gunsizeline
+
 /*
 ** textures structure
 */
@@ -184,6 +211,12 @@ typedef struct		s_text
 	void			*sand;
 	void			*ceil;
 	void			*ak;
+	void			*akf;
+	void			*usp;
+	void			*knife;
+	void			*he;
+	void			*c4;
+	void			*radar;
 	char			*walldata;
 	char			*walltagdata;
 	char			*winwalldata;
@@ -207,6 +240,12 @@ typedef struct		s_text
 	char			*sanddata;
 	char			*ceildata;
 	char			*akdata;
+	char			*akfdata;
+	char			*uspdata;
+	char			*knifedata;
+	char			*hedata;
+	char			*c4data;
+	char			*radardata;
 	int				textsizeline;
 	int				textx;
 	int				roadx;
@@ -218,7 +257,13 @@ typedef struct		s_text
 	int				roadsizeline;
 	int				weaponx;
 	int				weapony;
+	int				knifex;
+	int				knifey;
+	int				gunx;
+	int				guny;
 	int				weaponsizeline;
+	int				knifesizeline;
+	int				gunsizeline;
 }					t_text;
 
 /*
@@ -307,6 +352,8 @@ typedef struct		s_var
 	int				m;
 	int				i;
 	int				j;
+	int				weapon;
+	int				fire;
 	t_floor			*floor;
 	t_ray			*ray;
 	t_text			*text;
@@ -317,10 +364,11 @@ void				free_tab(t_var *var);
 void				restart_wolf3d(t_var *var);
 void				fill_image(t_var *var, int x, int y, int color);
 void				wall_raycasting(t_var *var, int x);
-void				draw_wall(t_var *var, int x);
 void				find_start(t_var *var);
 void				floor_raycasting(t_var *var, int x);
+void				draw_wall(t_var *var, int x);
 void				draw_floor(t_var *var, int x);
+void				draw_weapons(t_var *var);
 void				init_textures(t_var *var);
 void				init_raycasting(t_var *var);
 void				ft_moves(t_var *var);

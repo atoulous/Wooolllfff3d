@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 19:38:50 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/21 14:25:30 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/22 15:04:52 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	init_raycasting(t_var *var)
 	ROTSPEED = 0.1;
 	DUCK = 2;
 	DUCKEND = 4;
+	WEAPON = 1;
 }
 
 void	init_wolf3d(t_var *var, char *map)

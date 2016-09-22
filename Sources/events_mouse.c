@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/18 14:13:22 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/21 18:22:46 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/22 19:22:20 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		ft_mouse(int button, int x, int y, t_var *var)
 {
 	if (button == 1 || button == 4)
 	{
-		ft_putendl("FIRE");
+		FIRE == 1 ? FIRE = 0 : (FIRE = 1);
 	}
 	if (button == 2 || button == 6)
 	{
