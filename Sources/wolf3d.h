@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/26 15:38:58 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/27 16:44:53 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -372,7 +372,6 @@ void				wall_raycasting(t_var *var, int x);
 void				find_start(t_var *var);
 void				floor_raycasting(t_var *var, int x);
 void				draw_wall(t_var *var, int x);
-void				draw_floor(t_var *var, int x);
 void				draw_options(t_var *var);
 void				init_textures(t_var *var);
 void				init_raycasting(t_var *var);

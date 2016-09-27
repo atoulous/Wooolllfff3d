@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/17 13:09:02 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/20 15:46:50 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/27 16:44:16 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	draw_ceil(t_var *var, int x)
 	}
 }
 
-void	draw_floor(t_var *var, int x)
+void	draw_floor(t_var *var)
 {
 	if (TAB[(int)FLO->currentfloorx][(int)FLO->currentfloory] == 'R')
 		COLOR = ROADDATA[PX] + ROADDATA[PX + 1] * 256 + ROADDATA[PX + 2]
@@ -96,7 +96,7 @@ void	floor_raycasting(t_var *var, int x)
 	{
 		calc_floortex(var);
 		PX = FLO->floortexy * ROADSIZELINE + FLO->floortexx * (BPP / 8);
-		draw_floor(var, x);
+		draw_floor(var);
 		fill_image(var, x, DRAWEND, COLOR);
 		draw_ceil(var, x);
 	}

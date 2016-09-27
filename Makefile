@@ -6,7 +6,7 @@
 #    By: atoulous <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/06/17 21:56:41 by atoulous          #+#    #+#              #
-#    Updated: 2016/09/26 15:56:18 by atoulous         ###   ########.fr        #
+#    Updated: 2016/09/27 16:42:49 by atoulous         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC = Sources/events.c Sources/events_mouse.c Sources/events_moves.c \
 
 OBJ = $(SRC:.c=.o)
 
-CF = gcc #-Wall -Werror -Wextra
+CF = gcc -Wall -Werror -Wextra
 
 LIBS = -LLibs/libft/ -LLibs/minilibx_macos/
 
