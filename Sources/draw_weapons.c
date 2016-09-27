@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/22 14:32:07 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/22 19:22:45 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/26 14:58:41 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,10 @@ int		draw_ak47(t_var *var)
 		while (++y < HEIGHT_WIN)
 		{
 			PX = i * WEAPONSIZELINE + j * (BPP / 8);
-			if (FIRE == 0)
-				COLOR = AKDATA[PX] + AKDATA[PX + 1] * 256 +
-					AKDATA[PX + 2] * 65536;
-			if (FIRE == 1)
-				COLOR = AKFDATA[PX] + AKFDATA[PX + 1] * 256 +
-					AKFDATA[PX + 2] * 65536;
+			FIRE == 0 ? COLOR = AKDATA[PX] + AKDATA[PX + 1] * 256 +
+				AKDATA[PX + 2] * 65536 : 0;
+			FIRE == 1 ? COLOR = AKFDATA[PX] + AKFDATA[PX + 1] * 256 +
+				AKFDATA[PX + 2] * 65536 : 0;
 			if (COLOR != 0x000000)
 				fill_image(var, x, y, COLOR);
 			i++;
@@ -147,13 +145,4 @@ int		draw_c4(t_var *var)
 		j++;
 	}
 	return (0);
-}
-
-void	draw_weapons(t_var *var)
-{
-	WEAPON == 1 ? draw_ak47(var) : 0;
-	WEAPON == 2 ? draw_usp(var) : 0;
-	WEAPON == 3 ? draw_knife(var) : 0;
-	WEAPON == 4 ? draw_he(var) : 0;
-	WEAPON == 5 ? draw_c4(var) : 0;
 }

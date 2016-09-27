@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/20 15:29:02 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/21 00:20:22 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/26 15:55:53 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,32 +58,29 @@ void	telep_to_a(t_var *var)
 
 int		minecraft(t_var *var)
 {
-	if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'D')
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'p';
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'B')
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '0';
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'p')
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'D';
-	else if ((TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == '0')
-		&& (((int)(POS_X + DIR_X) != POS_X) && (int)(POS_Y + DIR_Y) != POS_Y))
-		TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'B';
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'A')
+	if (VIEW == 'D')
+		VIEW = 'p';
+	else if (VIEW == 'p')
+		VIEW = 'D';
+	else if (VIEW == 'B')
+		VIEW = '0';
+	else if (VIEW == '0' && VIEW != POS_Y)
+		VIEW = 'B';
+	else if (VIEW == 'A')
 		automate_on(var);
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'U')
+	else if (VIEW == 'U')
 		automate_off(var);
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'T'
-			&& POS_Y > 15)
+	else if (VIEW == 'T' && POS_Y > 15)
 		telep_to_b(var);
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'T'
-			&& POS_Y < 15)
+	else if (VIEW == 'T' && POS_Y < 15)
 		telep_to_a(var);
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == '1')
-			TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '2';
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == '2')
-			TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = '1';
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'F')
-			TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'f';
-	else if (TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] == 'f')
-			TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)] = 'F';
+	else if (VIEW == '1')
+		VIEW = '2';
+	else if (VIEW == '2')
+		VIEW = '1';
+	else if (VIEW == 'F')
+		VIEW = 'f';
+	else if (VIEW == 'f')
+		VIEW = 'F';
 	return (0);
 }

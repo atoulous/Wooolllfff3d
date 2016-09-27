@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 19:38:50 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/22 15:04:52 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/26 16:08:24 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	ft_wolf3d(int fd, char *map)
 	t_var	*var;
 	int		i;
 
+	if (ft_strcmp(map, "Maps/de_dust2") && ft_strcmp(map, "Maps/race"))
+		ft_exit(2);
 	if (!(var = (t_var*)ft_memalloc(sizeof(t_var))))
 		return (exit(EXIT_FAILURE));
 	if (!(var->ray = (t_ray*)ft_memalloc(sizeof(t_ray))))
@@ -72,7 +74,7 @@ void	ft_wolf3d(int fd, char *map)
 	mlx_loop_hook(MLX, launch_wolf3d, var);
 	mlx_hook(WIN, KeyPress, KeyPressMask, ft_key, var);
 	mlx_hook(WIN, KeyRelease, KeyReleaseMask, ft_release, var);
-	mlx_hook(WIN, 17, Button1MotionMask, ft_crossquit, var);
+	mlx_hook(WIN, DestroyNotify, Button1MotionMask, ft_crossquit, var);
 	mlx_hook(WIN, ButtonPress, ButtonPressMask, ft_mouse, var);
 	mlx_hook(WIN, MotionNotify, ButtonMotionMask, ft_motion_mouse, var);
 	mlx_loop(MLX);

@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/19 18:35:25 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/22 19:38:52 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/26 15:01:47 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,47 +30,6 @@ void	fill_image(t_var *var, int x, int y, int color)
 			DATA[y * SIZELINE + x * (BPP / 8) + 3] = 150;
 		else
 			DATA[y * SIZELINE + x * (BPP / 8) + 3] = 0;
-	}
-}
-
-void	draw_cursor(t_var *var)
-{
-	int		i;
-	int		x;
-
-	x = 0;
-	i = WIDTH_WIN / 2 - 12;
-	while (++i < WIDTH_WIN / 2 + 12)
-	{
-		x < 7 || x > 15 ? fill_image(var, i, HEIGHT_WIN / 2, 0xFFFF00) : 0;
-		x++;
-	}
-	x = 0;
-	i = HEIGHT_WIN / 2 - 12;
-	while (++i < HEIGHT_WIN / 2 + 12)
-	{
-		x < 7 || x > 15 ? fill_image(var, WIDTH_WIN / 2, i, 0xFFFF00) : 0;
-		x++;
-	}
-}
-
-void	draw_radar(t_var *var)
-{
-	int		i;
-	int		j;
-
-	i = -1;
-	while (++i < TEXTX)
-	{
-		j = -1;
-		while (++j < TEXTX)
-		{
-			PX = j * TEXTSIZELINE + i * (BPP / 8);
-			COLOR = RADARDATA[PX] + RADARDATA[PX + 1] * 256 +
-				RADARDATA[PX + 2] * 65536;
-			if (COLOR != 0x000000)
-				fill_image(var, i, j, COLOR);
-		}
 	}
 }
 
@@ -135,14 +94,13 @@ int		launch_wolf3d(t_var *var)
 			draw_skybox(var, x);
 			floor_raycasting(var, x);
 		}
-		draw_cursor(var);
-		draw_radar(var);
-		draw_weapons(var);
+		draw_options(var);
 		ft_moves(var);
 		mlx_put_image_to_window(MLX, WIN, IMG, 0, 0);
 	}
 	FIRE = 0;
 	D & (1 << 5) ? D ^= (1 << 5) : 0;
 	D & (1 << 4) ? D ^= (1 << 4) : 0;
+	D & (1 << 0) ? D ^= (1 << 0) : 0;
 	return (0);
 }

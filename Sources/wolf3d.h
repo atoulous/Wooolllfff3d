@@ -6,7 +6,7 @@
 /*   By: atoulous <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/07/18 15:38:27 by atoulous          #+#    #+#             */
-/*   Updated: 2016/09/22 19:21:43 by atoulous         ###   ########.fr       */
+/*   Updated: 2016/09/26 15:38:58 by atoulous         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # define FLO var->floor
 # define POS TAB[MAP_X][MAP_Y]
+# define VIEW TAB[(int)(POS_X + DIR_X)][(int)(POS_Y + DIR_Y)]
 
 /*
 ** wall raycasting defines
@@ -181,6 +182,8 @@
 # define WEAPONSIZELINE var->text->weaponsizeline
 # define KNIFESIZELINE var->text->knifesizeline
 # define GUNSIZELINE var->text->gunsizeline
+# define RADARSIZELINE var->text->radarsizeline
+# define RADARX var->text->radarx
 
 /*
 ** textures structure
@@ -264,6 +267,8 @@ typedef struct		s_text
 	int				weaponsizeline;
 	int				knifesizeline;
 	int				gunsizeline;
+	int				radarsizeline;
+	int				radarx;
 }					t_text;
 
 /*
@@ -360,7 +365,7 @@ typedef struct		s_var
 }					t_var;
 
 void				parse_map(t_var *var, int fd);
-void				free_tab(t_var *var);
+void				free_all(t_var *var);
 void				restart_wolf3d(t_var *var);
 void				fill_image(t_var *var, int x, int y, int color);
 void				wall_raycasting(t_var *var, int x);
@@ -368,10 +373,15 @@ void				find_start(t_var *var);
 void				floor_raycasting(t_var *var, int x);
 void				draw_wall(t_var *var, int x);
 void				draw_floor(t_var *var, int x);
-void				draw_weapons(t_var *var);
+void				draw_options(t_var *var);
 void				init_textures(t_var *var);
 void				init_raycasting(t_var *var);
 void				ft_moves(t_var *var);
+int					draw_ak47(t_var *var);
+int					draw_usp(t_var *var);
+int					draw_knife(t_var *var);
+int					draw_he(t_var *var);
+int					draw_c4(t_var *var);
 int					rotateright(t_var *var);
 int					rotateleft(t_var *var);
 int					ft_key(int keycode, t_var *var);
